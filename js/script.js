@@ -136,6 +136,9 @@ window.initMap = function () {
           currentInfoWindow.close();
         }
 
+        // Set lastActiveMarker to this marker
+        lastActiveMarker = marker;
+
         // Open the new info window
         marker.infowindow.open(map, marker);
 
@@ -288,6 +291,9 @@ window.initMap = function () {
         currentInfoWindow.close();
       }
 
+      // Clear lastActiveMarker
+      lastActiveMarker = null;
+
       // Open the infowindow
       selectedMarker.infowindow.open(map, selectedMarker);
 
@@ -313,6 +319,9 @@ window.initMap = function () {
       if (currentInfoWindow) {
         currentInfoWindow.close();
       }
+
+      // Clear lastActiveMarker
+      lastActiveMarker = null;
 
       // Open the infowindow
       selectedMarker.infowindow.open(map, selectedMarker);
@@ -396,6 +405,9 @@ window.initMap = function () {
       if (currentInfoWindow) {
         currentInfoWindow.close();
       }
+
+      // Set lastActiveMarker to the nearest marker
+      lastActiveMarker = nearestMarker;
 
       // Open the info window of the nearest marker
       nearestMarker.infowindow.open(map, nearestMarker);
