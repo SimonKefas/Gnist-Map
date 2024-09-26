@@ -110,6 +110,7 @@ window.initMap = function () {
         // Remove the 'is-active' class from sidebar items
         $(".sidebar-item").removeClass("is-active");
         currentInfoWindow = null;
+        lastActiveMarker = null; // Ensure lastActiveMarker is cleared
       });
 
       // Create the marker using google.maps.Marker
@@ -377,10 +378,11 @@ window.initMap = function () {
     markers.forEach(function (marker) {
       if (marker) {
         var markerPosition = marker.getPosition();
-        var distance = google.maps.geometry.spherical.computeDistanceBetween(
-          new google.maps.LatLng(userLocation),
-          markerPosition
-        );
+        var distance =
+          google.maps.geometry.spherical.computeDistanceBetween(
+            new google.maps.LatLng(userLocation),
+            markerPosition
+          );
         if (distance < minDistance) {
           minDistance = distance;
           nearestMarker = marker;
@@ -414,17 +416,16 @@ window.initMap = function () {
   map.addListener("idle", function () {
     if (currentInfoWindow && currentInfoWindow.getMap()) {
       var marker = currentInfoWindow.anchor;
-      if (marker && !marker.getVisible()) {
-        // The marker is not visible (probably clustered)
+      if (marker && !marker.getMap()) {
+        // The marker is not on the map (probably clustered)
         currentInfoWindow.close();
         lastActiveMarker = marker;
         currentInfoWindow = null;
         // Remove the 'is-active' class from sidebar items
         $(".sidebar-item").removeClass("is-active");
       }
-    } else if (lastActiveMarker && lastActiveMarker.getVisible()) {
+    } else if (lastActiveMarker && lastActiveMarker.getMap()) {
       // The last active marker is now visible again
-      // Open its info window
       lastActiveMarker.infowindow.open(map, lastActiveMarker);
       currentInfoWindow = lastActiveMarker.infowindow;
       // Highlight the sidebar item
