@@ -67,7 +67,8 @@ window.initMap = function () {
   // Loop through sidebar items to get Place IDs and backup data
   sidebarItems.forEach(function (item, index) {
     var placeId = item.getAttribute("data-place-id");
-    var bookingLink = item.querySelector("a").getAttribute("href");
+    var bookingLinkEl = item.querySelector("a.booking-link") || item.querySelector("a");
+    var bookingLink = bookingLinkEl ? bookingLinkEl.getAttribute("href") : "";
     var bookingText = item.querySelector("p").innerText;
     var bookingImage = item.querySelector("img").getAttribute("src");
     var name = item.querySelector("h3").innerText;
@@ -162,7 +163,7 @@ window.initMap = function () {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           // Use Google data if available
           var address = place.formatted_address || "";
-          var website = place.website || bookingLink;
+          var website = bookingLink || place.website;
 
           // Get photo from Google Places
           var photos = place.photos;
